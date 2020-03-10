@@ -50,7 +50,7 @@ class TodoForm extends Component {
     if (this.props.isEditState) {
       return (
         <Fragment>
-          <button className="btn yellow darken-3">Edit Todo</button>
+          <button className="btn edit-btn yellow darken-3">Edit Todo</button>
           <div
             className="btn green lighten-2"
             onClick={this.props.cancelEditState}

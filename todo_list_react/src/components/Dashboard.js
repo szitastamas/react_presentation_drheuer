@@ -57,21 +57,21 @@ class Dashboard extends Component {
             isEditState: false
         })
 
-        this.setAlert(`Todo ${editedTodo.id} updated`, "success")
+        this.setAlert(`Todo updated to: ${editedTodo.title}`, "success")
 
     }
 
-    deleteTodo = id => {
-        if(this.state.isEditState && id === this.state.toBeEditedTodo.id){
+    deleteTodo = deletedTodo => {
+        if(this.state.isEditState && deletedTodo.id === this.state.toBeEditedTodo.id){
             this.cancelEditState();
         }
 
         this.setState({
-            todos: this.state.todos.filter(todo => todo.id !== id)
+            todos: this.state.todos.filter(todo => todo.id !== deletedTodo.id)
         })
 
-        deleteFromLS(id);
-        this.setAlert("Todo deleted", "danger")
+        deleteFromLS(deletedTodo.id);
+        this.setAlert(`"${deletedTodo.title}" deleted`, "danger")
     }
 
     setAlert = (text, type) => {

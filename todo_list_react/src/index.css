@@ -25,6 +25,7 @@ code {
 
 .edit-btn{
   cursor: pointer;
+  margin-right: 1rem;
   transition: 200ms color ease-out;
 }
 
