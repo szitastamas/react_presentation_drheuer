@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {memo} from 'react'
 
 const TodoItem = ({ todo, deleteTodo, setEditState }) => {
     return (
@@ -10,4 +10,4 @@ const TodoItem = ({ todo, deleteTodo, setEditState }) => {
     )
 }
 
-export default TodoItem;
+export default memo(TodoItem);

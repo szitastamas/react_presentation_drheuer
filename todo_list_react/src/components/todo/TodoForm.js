@@ -8,7 +8,7 @@ class TodoForm extends Component {
     }
   };
 
-  componentWillUpdate(nextProps) {
+  UNSAFE_componentWillUpdate(nextProps) {
     if (this.props.isEditState === false && nextProps.isEditState === true) {
       const { id, title } = nextProps.toBeEditedTodo;
       this.setState({
@@ -42,7 +42,7 @@ class TodoForm extends Component {
         : this.props.addTodo(this.state.todo);
       this.setState({ todo: { id: null, title: "" } });
     } else {
-      console.log("Title cannot be empty");
+      this.props.setAlert("Todo title must not be empty", "danger")
     }
   };
 
@@ -50,7 +50,7 @@ class TodoForm extends Component {
     if (this.props.isEditState) {
       return (
         <Fragment>
-          <button className="btn">Edit Todo</button>
+          <button className="btn yellow darken-3">Edit Todo</button>
           <div
             className="btn green lighten-2"
             onClick={this.props.cancelEditState}

@@ -1,25 +1,39 @@
 import React, { Component } from 'react'
 import TodoForm from './todo/TodoForm'
 import TodoTable from './todo/TodoTable'
+import { loadFromLS, saveToLS, editInLS, deleteFromLS } from './utility/LocalStorage'
+import Alert from './alert/Alert'
 
 class Dashboard extends Component {
     state = {
-        todos: [{
-            id: 1234,
-            title: 'Buy milk'
-        }],
+        todos: [],
         toBeEditedTodo: null,
-        isEditState: false
+        isEditState: false,
+        alert: []
+    }
+
+    componentDidMount = () => {
+        this.setState({
+            todos: loadFromLS()
+        })
     }
     
-    addTodo = async (todo) => {
+    addTodo = (todo) => {
+        
         todo.id=Date.now();
+        saveToLS(todo);
+
         this.setState({
             todos: [...this.state.todos, todo]
         })
+
+        this.setAlert(`"${todo.title}" added`, "success")
     }
 
     setEditState = (todo) => {
+
+        this.state.isEditState && this.cancelEditState();
+
         this.setState({
             toBeEditedTodo: {...todo},
             isEditState: true
@@ -34,17 +48,39 @@ class Dashboard extends Component {
     }
 
     editTodo = (editedTodo) => {
+
+        editInLS(editedTodo);
+
         this.setState({
             todos: this.state.todos.map(todo => todo.id === editedTodo.id ? editedTodo : todo),
             toBeEditedTodo: null,
             isEditState: false
         })
+
+        this.setAlert(`Todo ${editedTodo.id} updated`, "success")
+
     }
 
     deleteTodo = id => {
+        if(this.state.isEditState && id === this.state.toBeEditedTodo.id){
+            this.cancelEditState();
+        }
+
         this.setState({
             todos: this.state.todos.filter(todo => todo.id !== id)
         })
+
+        deleteFromLS(id);
+        this.setAlert("Todo deleted", "danger")
+    }
+
+    setAlert = (text, type) => {
+        const id = Date.now();
+        this.setState({
+            alert: [...this.state.alert, { id, text, type }]
+        })
+
+        setTimeout(() => this.setState({ alert: this.state.alert.filter(alert => alert.id !== id) }),3000)
     }
 
     render(){
@@ -56,7 +92,9 @@ class Dashboard extends Component {
                     editTodo={this.editTodo} 
                     isEditState={this.state.isEditState} 
                     toBeEditedTodo={this.state.toBeEditedTodo}
-                    cancelEditState={this.cancelEditState}/>
+                    cancelEditState={this.cancelEditState}
+                    setAlert={this.setAlert}/>
+                {this.state.alert.length > 0 && this.state.alert.map(al => <Alert key={al.id} text={al.text} type={al.type}/>)}
                 <TodoTable 
                     todos={this.state.todos} 
                     deleteTodo={this.deleteTodo}

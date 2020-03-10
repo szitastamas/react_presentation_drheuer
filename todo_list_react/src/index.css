@@ -31,3 +31,26 @@ code {
 .edit-btn:hover{
   color: rgb(0, 83, 83) !important;
 }
+
+.alert{
+  color: whitesmoke;
+  font-weight: 600;
+  text-align: center;
+  padding: .7rem 1rem;
+  margin: 1rem 0;
+  opacity: 0;
+  transform: translateX(50px);
+  animation: 500ms fadeIn forwards;
+}
+
+.alert.success{
+  background: rgb(0, 73, 0);
+}
+
+.alert.danger{
+  background: darkred;
+}
+
+@keyframes fadeIn{
+  100%{opacity: 1; transform: none;}
+}

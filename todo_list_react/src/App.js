@@ -9,7 +9,7 @@ function App() {
     <div className="container">
       <div className="row">
         <div className="col s4">
-          <About demoProp={{name: "Marius"}}/>
+          <About />
         </div>
         <div className="col s6 offset-s2">
           <Dashboard />
