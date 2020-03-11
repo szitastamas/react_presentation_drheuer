@@ -52,6 +52,16 @@ code {
   background: darkred;
 }
 
+.completed-icon{
+  cursor: pointer;
+  transition: transform 200ms ease-out;
+  width: 30px;
+}
+
+.completed-icon:hover{
+  transform: translateY(-2px);
+}
+
 @keyframes fadeIn{
   100%{opacity: 1; transform: none;}
 }

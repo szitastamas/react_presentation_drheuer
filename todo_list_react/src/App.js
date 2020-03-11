@@ -4,7 +4,7 @@ import 'materialize-css/dist/js/materialize.min.js';
 import About from "./components/about/About";
 import Dashboard from "./components/Dashboard";
 
-function App() {
+const App = () => {
   return (
     <div className="container">
       <div className="row">

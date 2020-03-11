@@ -9,7 +9,7 @@ class Dashboard extends Component {
         todos: [],
         toBeEditedTodo: null,
         isEditState: false,
-        alert: []
+        alerts: []
     }
 
     componentDidMount = () => {
@@ -77,10 +77,10 @@ class Dashboard extends Component {
     setAlert = (text, type) => {
         const id = Date.now();
         this.setState({
-            alert: [...this.state.alert, { id, text, type }]
+            alerts: [...this.state.alerts, { id, text, type }]
         })
 
-        setTimeout(() => this.setState({ alert: this.state.alert.filter(alert => alert.id !== id) }),3000)
+        setTimeout(() => this.setState({ alerts: this.state.alerts.filter(alert => alert.id !== id) }),3000)
     }
 
     render(){
@@ -94,14 +94,16 @@ class Dashboard extends Component {
                     toBeEditedTodo={this.state.toBeEditedTodo}
                     cancelEditState={this.cancelEditState}
                     setAlert={this.setAlert}/>
-                {this.state.alert.length > 0 && this.state.alert.map(al => <Alert key={al.id} text={al.text} type={al.type}/>)}
+                {this.state.alerts.length > 0 && this.state.alerts.map(alert => <Alert key={alert.id} text={alert.text} type={alert.type}/>)}
                 <TodoTable 
                     todos={this.state.todos} 
                     deleteTodo={this.deleteTodo}
-                    setEditState={this.setEditState}/>
+                    setEditState={this.setEditState}
+                    editTodo={this.editTodo}/>
             </div>
         )
     }
 }
 
 export default Dashboard;
+

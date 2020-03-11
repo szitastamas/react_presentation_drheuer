@@ -1,7 +1,7 @@
 import React from "react";
 import TodoItem from "./TodoItem";
 
-export const TodoTable = ({ todos, deleteTodo, setEditState }) => {
+export const TodoTable = ({ todos, deleteTodo, setEditState, editTodo }) => {
   return (
     <div>
       {todos.length === 0 ? (
@@ -9,11 +9,16 @@ export const TodoTable = ({ todos, deleteTodo, setEditState }) => {
       ) : (
         <ul className="collection with-header">
           <li key={"collection-header"} className="collection-header">
-            <strong>Your todos:</strong>{" "}
+            <strong>Your todos:</strong>
           </li>
           {todos.map(todo => {
             return (
-              <TodoItem key={todo.id} todo={todo} deleteTodo={deleteTodo} setEditState={setEditState}/>
+              <TodoItem 
+                key={todo.id} 
+                todo={todo} 
+                deleteTodo={deleteTodo} 
+                setEditState={setEditState} 
+                editTodo={editTodo}/>
             );
           })}
         </ul>

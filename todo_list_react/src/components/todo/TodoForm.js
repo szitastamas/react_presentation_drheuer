@@ -4,31 +4,29 @@ class TodoForm extends Component {
   state = {
     todo: {
       id: null,
-      title: ""
+      title: "",
+      isCompleted: false
     }
   };
 
   UNSAFE_componentWillUpdate(nextProps) {
     if (this.props.isEditState === false && nextProps.isEditState === true) {
-      const { id, title } = nextProps.toBeEditedTodo;
       this.setState({
-        todo: { id, title }
+        todo: { ...nextProps.toBeEditedTodo }
       });
     } else if (
       this.props.isEditState === true &&
       nextProps.isEditState === false
     ) {
-      this.setState({
-        todo: { id: null, title: "" }
-      });
+      this.resetState();
     }
   }
-
+  
   handleChange = e => {
     this.setState({
       todo: {
-        id: this.props.isEditState ? this.props.toBeEditedTodo.id : null,
-        title: e.target.value
+        ...this.state.todo,
+        [e.target.name]: e.target.value
       }
     });
   };
@@ -40,11 +38,14 @@ class TodoForm extends Component {
       this.props.isEditState
         ? this.props.editTodo(this.state.todo)
         : this.props.addTodo(this.state.todo);
-      this.setState({ todo: { id: null, title: "" } });
+      
+        this.resetState();
     } else {
       this.props.setAlert("Todo title must not be empty", "danger")
     }
   };
+
+  resetState = () => this.setState({ todo: { id: null, title: "", isCompleted: false } })
 
   showButtonsAccordingToEditState = () => {
     if (this.props.isEditState) {
@@ -72,14 +73,17 @@ class TodoForm extends Component {
             <input
               type="text"
               id="todo-input"
+              name="title"
               value={this.state.todo.title}
               onChange={this.handleChange}
             />
             {!this.props.isEditState && (
               <label htmlFor="todo-input">Type in a Todo...</label>
-            )}
+              )}
           </div>
-          {this.showButtonsAccordingToEditState()}
+          <div className="input-field">
+            {this.showButtonsAccordingToEditState()}
+          </div>
         </form>
         <div className="divider" style={{ margin: "3rem 0 1.5rem 0" }}></div>
       </Fragment>
