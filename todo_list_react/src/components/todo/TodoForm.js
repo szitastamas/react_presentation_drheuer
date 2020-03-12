@@ -1,61 +1,59 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment, useState, useContext, useEffect } from "react";
+import TodoContext from "../../context/todo/TodoContext";
+import AlertContext from "../../context/alert/AlertContext";
 
-class TodoForm extends Component {
-  state = {
-    todo: {
-      id: null,
-      title: "",
-      isCompleted: false
-    }
-  };
+const TodoForm = () => {
+  const {
+    isEditState,
+    addTodo,
+    editTodo,
+    cancelEditState,
+    toBeEditedTodo
+  } = useContext(TodoContext);
 
-  UNSAFE_componentWillUpdate(nextProps) {
-    if (this.props.isEditState === false && nextProps.isEditState === true) {
-      this.setState({
-        todo: { ...nextProps.toBeEditedTodo }
-      });
-    } else if (
-      this.props.isEditState === true &&
-      nextProps.isEditState === false
-    ) {
-      this.resetState();
+  const { setAlert } = useContext(AlertContext);
+
+  const [todo, setTodo] = useState({
+    id: null,
+    title: "",
+    isCompleted: false
+  });
+
+  useEffect(() => {
+    if (isEditState) {
+      setTodo({ ...toBeEditedTodo });
+    } else {
+      resetState();
     }
-  }
-  
-  handleChange = e => {
-    this.setState({
-      todo: {
-        ...this.state.todo,
-        [e.target.name]: e.target.value
-      }
+    // eslint-disable-next-line
+  }, [isEditState]);
+
+  const handleChange = e => {
+    setTodo({
+      ...todo,
+      [e.target.name]: e.target.value
     });
   };
 
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    if (this.state.todo.title !== "") {
-      this.props.isEditState
-        ? this.props.editTodo(this.state.todo)
-        : this.props.addTodo(this.state.todo);
-      
-        this.resetState();
+    if (todo.title !== "") {
+      isEditState ? editTodo(todo) : addTodo(todo);
+      resetState();
     } else {
-      this.props.setAlert("Todo title must not be empty", "danger")
+      setAlert("Title must not be empty", "danger");
     }
   };
 
-  resetState = () => this.setState({ todo: { id: null, title: "", isCompleted: false } })
+  const resetState = () => setTodo({ id: null, title: "", isCompleted: false });
 
-  showButtonsAccordingToEditState = () => {
-    if (this.props.isEditState) {
+  const showButtonsAccordingToEditState = () => {
+    if (isEditState) {
       return (
         <Fragment>
           <button className="btn edit-btn yellow darken-3">Edit Todo</button>
-          <div
-            className="btn green lighten-2"
-            onClick={this.props.cancelEditState}
-          >
+          <div className="btn green lighten-2" onClick={cancelEditState}>
             Cancel
           </div>
         </Fragment>
@@ -65,30 +63,26 @@ class TodoForm extends Component {
     }
   };
 
-  render() {
-    return (
-      <Fragment>
-        <form onSubmit={this.handleSubmit}>
-          <div className="input-field">
-            <input
-              type="text"
-              id="todo-input"
-              name="title"
-              value={this.state.todo.title}
-              onChange={this.handleChange}
-            />
-            {!this.props.isEditState && (
-              <label htmlFor="todo-input">Type in a Todo...</label>
-              )}
-          </div>
-          <div className="input-field">
-            {this.showButtonsAccordingToEditState()}
-          </div>
-        </form>
-        <div className="divider" style={{ margin: "3rem 0 1.5rem 0" }}></div>
-      </Fragment>
-    );
-  }
-}
+  return (
+    <Fragment>
+      <form onSubmit={handleSubmit}>
+        <div className="input-field">
+          <input
+            type="text"
+            id="todo-input"
+            name="title"
+            value={todo.title}
+            onChange={handleChange}
+          />
+          {!isEditState && (
+            <label htmlFor="todo-input">Type in a Todo...</label>
+          )}
+        </div>
+        <div className="input-field">{showButtonsAccordingToEditState()}</div>
+      </form>
+      <div className="divider" style={{ margin: "3rem 0 1.5rem 0" }}></div>
+    </Fragment>
+  );
+};
 
 export default TodoForm;

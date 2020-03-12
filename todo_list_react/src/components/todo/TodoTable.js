@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import TodoItem from "./TodoItem";
+import TodoContext from "../../context/todo/TodoContext";
 
-export const TodoTable = ({ todos, deleteTodo, setEditState, editTodo }) => {
+const TodoTable = () => {
+
+  const { todos } = useContext(TodoContext)
+
   return (
     <div>
       {todos.length === 0 ? (
@@ -13,12 +17,7 @@ export const TodoTable = ({ todos, deleteTodo, setEditState, editTodo }) => {
           </li>
           {todos.map(todo => {
             return (
-              <TodoItem 
-                key={todo.id} 
-                todo={todo} 
-                deleteTodo={deleteTodo} 
-                setEditState={setEditState} 
-                editTodo={editTodo}/>
+              <TodoItem key={todo.id} todo={todo}/>
             );
           })}
         </ul>

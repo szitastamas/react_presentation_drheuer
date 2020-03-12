@@ -1,10 +1,17 @@
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
+import TodoContext from "../../context/todo/TodoContext";
 
-const TodoItem = ({ todo, deleteTodo, setEditState, editTodo }) => {
+const TodoItem = ({ todo }) => {
+
+  const { editTodo, deleteTodo, setEditState } = useContext(TodoContext)
 
   const setCompleted = () => {
-      const editedTodo = todo.isCompleted ? {...todo, isCompleted: false} : {...todo, isCompleted: true}
-      editTodo(editedTodo);
+    const currentCompletionState = todo.isCompleted;
+    const newTodo = {
+      ...todo,
+      isCompleted: !currentCompletionState
+    }
+    editTodo(newTodo);
   }
 
   return (
